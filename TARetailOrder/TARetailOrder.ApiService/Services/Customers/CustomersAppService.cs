@@ -73,6 +73,10 @@ namespace TARetailOrder.ApiService.Services.Customers
 
         public async Task<CustomerDto> GetByIdAsync(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Customer ID cannot be empty.", nameof(id));
+            }
             try
             {
                 var customer = await _customerRepository.GetByIdAsync(id);
@@ -106,6 +110,10 @@ namespace TARetailOrder.ApiService.Services.Customers
 
         public async Task DeleteAsync(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Customer ID cannot be empty.", nameof(id));
+            }
             try
             {
                 await _customerRepository.DeleteByIdAsync(id);
@@ -120,7 +128,7 @@ namespace TARetailOrder.ApiService.Services.Customers
 
         public async Task CreateOrEditAsync(CreateOrEditCustomerDto input)
         {
-            if(input.ID == null)
+            if(input.ID == Guid.Empty)
             {
                 await Create(input);
             }

@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace TARetailOrder.ApiService.Services.Customers.DTOs
 {
     public class CreateOrEditCustomerDto
     {
-        public Guid ID { get; set; }
+        [SwaggerSchema("Leave empty for new customer, provide existing ID for updates")]
+        public Guid? ID { get; set; }
         [Required]
         [StringLength(200)]
         public string FirstName { get; set; }

@@ -9,8 +9,8 @@ namespace TARetailOrder.ApiService.Repositories.Customers
     public class CustomerRepository: ICustomerRepository
     {
         private readonly DBDataContext _db;
-        private readonly ILogger<CustomersAppService> _logger;
-        public CustomerRepository(DBDataContext db, ILogger<CustomersAppService> logger)
+        private readonly ILogger<CustomerRepository> _logger;
+        public CustomerRepository(DBDataContext db, ILogger<CustomerRepository> logger)
         {
             _db = db;
             _logger = logger;

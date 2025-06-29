@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TARetailOrder.ApiService.DataContext.Models;
 using TARetailOrder.ApiService.Services.Customers;
 using TARetailOrder.ApiService.Services.Customers.DTOs;
 
@@ -11,10 +10,10 @@ namespace TARetailOrder.ApiService.Controllers.Customers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomersAppService _customersAppService;
-        private readonly ILogger<CustomersAppService> _logger;
+        private readonly ILogger<CustomerController> _logger;
         public CustomerController(
             ICustomersAppService customersAppService, 
-            ILogger<CustomersAppService> logger)
+            ILogger<CustomerController> logger)
         {
             _customersAppService = customersAppService;
             _logger = logger;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using TARetailOrder.ApiService.Services.Customers.DTOs;
 using TARetailOrder.ApiService.DataContext.Models;
+using TARetailOrder.ApiService.Services.Categories.DTOs;
+using TARetailOrder.ApiService.Services.Customers.DTOs;
 namespace TARetailOrder.ApiService.Services
 {
     public class DtoMapper
@@ -9,6 +10,9 @@ namespace TARetailOrder.ApiService.Services
         {
             configuration.CreateMap<CreateOrEditCustomerDto, Customer>().ReverseMap();
             configuration.CreateMap<CustomerDto, Customer>().ReverseMap();
+
+            configuration.CreateMap<CreateOrEditCategoryDto, Category>().ReverseMap();
+            configuration.CreateMap<CategoryDto, Category>().ReverseMap();
         }
     }
 }
