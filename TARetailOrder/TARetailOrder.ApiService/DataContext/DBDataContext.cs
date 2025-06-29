@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TARetailOrder.ApiService.DataContext.Models;
 using TARetailOrder.ApiService.Enums;
-using TARetailOrder.ApiService.Services.Customer;
+using TARetailOrder.ApiService.Services.Customers;
 using TARetailOrder.ApiService.Services.PasswordHash;
 
 
@@ -22,6 +22,7 @@ namespace TARetailOrder.ApiService.DataContext
 
         public DbSet<Customer> Customer { get; set;}
         public DbSet<User> User { get; set; }
+        public DbSet<Category> Category { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +42,10 @@ namespace TARetailOrder.ApiService.DataContext
                 e.HasKey(u => u.ID);
             });
             modelBuilder.Entity<User>(e =>
+            {
+                e.HasKey(u => u.ID);
+            });
+            modelBuilder.Entity<Category>(e =>
             {
                 e.HasKey(u => u.ID);
             });

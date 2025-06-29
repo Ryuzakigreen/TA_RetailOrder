@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TARetailOrder.ApiService.Services.Categories.DTOs;
 
-namespace TARetailOrder.ApiService.Services.Customers.DTOs
+namespace TARetailOrder.ApiService.Services.Categories.DTOs
 {
-    public class GetAllCustomerDto
+    public class GetAllCategoryDto
     {
         public SummaryResult SummaryResult { get; set; }
-        public List<CustomerDto> CustomerList { get; set; }
+        public List<CategoryDto> CategoryList { get; set; }
     }
     public class SummaryResult
     {

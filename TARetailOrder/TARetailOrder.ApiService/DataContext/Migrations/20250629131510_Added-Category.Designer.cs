@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TARetailOrder.ApiService.DataContext;
@@ -11,9 +12,11 @@ using TARetailOrder.ApiService.DataContext;
 namespace TARetailOrder.ApiService.DataContext.Migrations
 {
     [DbContext(typeof(DBDataContext))]
-    partial class DBDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250629131510_Added-Category")]
+    partial class AddedCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

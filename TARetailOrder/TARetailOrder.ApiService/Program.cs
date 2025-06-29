@@ -3,8 +3,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TARetailOrder.ApiService.DataContext;
+using TARetailOrder.ApiService.Repositories.Categories;
 using TARetailOrder.ApiService.Repositories.Customers;
-using TARetailOrder.ApiService.Services.Customer;
+using TARetailOrder.ApiService.Services;
+using TARetailOrder.ApiService.Services.Categories;
+using TARetailOrder.ApiService.Services.Customers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,14 +31,26 @@ builder.Services.AddControllers(options =>
     options.SuppressAsyncSuffixInActionNames = false;
 });
 
+builder.Services.AddAutoMapper(config =>
+{
+    DtoMapper.CreateMappings(config);
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
+//Customer
 builder.Services.AddScoped<ICustomersAppService, CustomersAppService>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+//Category
+builder.Services.AddScoped<ICategoriesAppService, CategoriesAppService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+
 
 
 builder.Services.AddSwaggerGen(c =>
 {
+    c.CustomSchemaIds(type => type.FullName);
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Title = "Retail Order API",
