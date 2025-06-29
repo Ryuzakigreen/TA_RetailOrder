@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TARetailOrder.ApiService.DataContext;
 using TARetailOrder.ApiService.Repositories.Customers;
-using TARetailOrder.ApiService.Services.Customer;
+using TARetailOrder.ApiService.Services;
+using TARetailOrder.ApiService.Services.Customers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,11 @@ builder.Services.AddProblemDetails();
 builder.Services.AddControllers(options =>
 {
     options.SuppressAsyncSuffixInActionNames = false;
+});
+
+builder.Services.AddAutoMapper(config =>
+{
+    DtoMapper.CreateMappings(config);
 });
 
 builder.Services.AddEndpointsApiExplorer();

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TARetailOrder.ApiService.DataContext;
 using TARetailOrder.ApiService.DataContext.Models;
-using TARetailOrder.ApiService.Services.Customer;
+using TARetailOrder.ApiService.Services.Customers;
 using TARetailOrder.ApiService.Services.Customers.DTOs;
 
 namespace TARetailOrder.ApiService.Repositories.Customers
@@ -16,7 +16,7 @@ namespace TARetailOrder.ApiService.Repositories.Customers
             _logger = logger;
         }
 
-        public async Task<(IEnumerable<Customer>Items, int TotalCount)> GetAllAsync(GetCustomerFilterInputDto filter)
+        public async Task<(IEnumerable<Customer>Items, int TotalCount)> GetAllAsync(FilterInputDto filter)
         {
             try
             {
@@ -43,7 +43,12 @@ namespace TARetailOrder.ApiService.Repositories.Customers
         {
             try
             {
-                return await _db.Customer.FindAsync(id) ?? new Customer();
+                var qry = await _db.Customer.FindAsync(id);
+                if(qry == null)
+                {
+                    return new Customer();
+                }
+                return qry.IsDeleted ? new Customer(): qry;
             }
             catch (Exception ex)
             {
@@ -51,6 +56,41 @@ namespace TARetailOrder.ApiService.Repositories.Customers
                 throw;
             }
             
+        }
+
+        public async Task InsertAsync(Customer customer)
+        {
+            try
+            {
+                customer.CreationTime = DateTime.UtcNow;
+                customer.CreatorUserId = 0;
+                customer.IsDeleted = false;
+                await _db.Customer.AddAsync(customer);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CustomerRepository| Failed to Execute AddAsync. Error: {ErrorMessage}", ex.Message);
+                throw;
+            }
+
+        }
+
+        public async Task UpdateAsync(Customer customer)
+        {
+            try
+            {
+                customer.LastModificationTime = DateTime.UtcNow;
+                customer.LastModifierUserId = 0;
+                _db.Customer.Update(customer);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CustomerRepository| Failed to Execute UpdateAsync. Error: {ErrorMessage}", ex.Message);
+                throw;
+            }
+
         }
 
         public async Task DeleteByIdAsync(Guid id)
@@ -63,26 +103,12 @@ namespace TARetailOrder.ApiService.Repositories.Customers
                     customer.IsDeleted = true;
                     customer.DeletionTime = DateTime.UtcNow;
                     customer.DeleterUserId = 0;
+                    await _db.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CustomerRepository| Failed to Execute DeleteByIdAsync. Error: {ErrorMessage}", ex.Message);
-                throw;
-            }
-            
-        }
-
-        public async Task UpdateAsync(Customer customer)
-        {
-            try
-            {
-                _db.Customer.Update(customer);
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "CustomerRepository| Failed to Execute UpdateAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
             

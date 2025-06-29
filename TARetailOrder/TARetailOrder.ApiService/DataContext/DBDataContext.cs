@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TARetailOrder.ApiService.DataContext.Models;
 using TARetailOrder.ApiService.Enums;
-using TARetailOrder.ApiService.Services.Customer;
+using TARetailOrder.ApiService.Services.Customers;
 using TARetailOrder.ApiService.Services.PasswordHash;
 
 

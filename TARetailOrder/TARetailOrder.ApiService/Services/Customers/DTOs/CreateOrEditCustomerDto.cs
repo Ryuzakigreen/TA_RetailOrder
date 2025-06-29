@@ -4,6 +4,7 @@ namespace TARetailOrder.ApiService.Services.Customers.DTOs
 {
     public class CreateOrEditCustomerDto
     {
+        public Guid ID { get; set; }
         [Required]
         [StringLength(200)]
         public string FirstName { get; set; }
