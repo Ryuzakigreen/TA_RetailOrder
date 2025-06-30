@@ -1,26 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TARetailOrder.ApiService.DataContext;
 using TARetailOrder.ApiService.DataContext.Models;
-using TARetailOrder.ApiService.Services.Customers;
-using TARetailOrder.ApiService.Services.Customers.DTOs;
+using TARetailOrder.ApiService.Services.Products.DTOs;
 
-namespace TARetailOrder.ApiService.Repositories.Customers
+namespace TARetailOrder.ApiService.Repositories.Products
 {
-    public class CustomerRepository: ICustomerRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly DBDataContext _db;
-        private readonly ILogger<CustomerRepository> _logger;
-        public CustomerRepository(DBDataContext db, ILogger<CustomerRepository> logger)
+        private readonly ILogger<ProductRepository> _logger;
+        public ProductRepository(DBDataContext db, ILogger<ProductRepository> logger)
         {
             _db = db;
             _logger = logger;
         }
 
-        public async Task<(IEnumerable<Customer>Items, int TotalCount)> GetAllAsync(FilterInputDto filter)
+        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetAllAsync(FilterInputDto filter)
         {
             try
             {
-                var qry = _db.Customer
+                var qry = _db.Product
+                .Include(e=> e.CategoryId)
                 .Where(c => !c.IsDeleted);
 
                 var totalCount = await qry.CountAsync();
@@ -36,19 +36,20 @@ namespace TARetailOrder.ApiService.Repositories.Customers
                 _logger.LogError(ex, "Failed to Execute GetAllAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
-            
         }
 
-        public async Task<Customer> GetByIdAsync(Guid id)
+        public async Task<Product> GetByIdAsync(Guid id)
         {
             try
             {
-                var qry = await _db.Customer.FindAsync(id);
+                var qry = await _db.Product
+                    .Include(e => e.CategoryId)
+                    .FirstOrDefaultAsync(e=> e.ID == id);
                 if(qry == null)
                 {
-                    return new Customer();
+                    return new Product();
                 }
-                return qry.IsDeleted ? new Customer(): qry;
+                return qry.IsDeleted ? new Product(): qry;
             }
             catch (Exception ex)
             {
@@ -58,14 +59,14 @@ namespace TARetailOrder.ApiService.Repositories.Customers
             
         }
 
-        public async Task InsertAsync(Customer input)
+        public async Task InsertAsync(Product input)
         {
             try
             {
                 input.CreationTime = DateTime.UtcNow;
                 input.CreatorUserId = 0;
                 input.IsDeleted = false;
-                await _db.Customer.AddAsync(input);
+                await _db.Product.AddAsync(input);
                 await _db.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -76,13 +77,13 @@ namespace TARetailOrder.ApiService.Repositories.Customers
 
         }
 
-        public async Task UpdateAsync(Customer input)
+        public async Task UpdateAsync(Product input)
         {
             try
             {
                 input.LastModificationTime = DateTime.UtcNow;
                 input.LastModifierUserId = 0;
-                _db.Customer.Update(input);
+                _db.Product.Update(input);
                 await _db.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -97,12 +98,12 @@ namespace TARetailOrder.ApiService.Repositories.Customers
         {
             try
             {
-                var customer = await _db.Customer.FindAsync(id);
-                if (customer != null)
+                var Product = await _db.Product.FindAsync(id);
+                if (Product != null)
                 {
-                    customer.IsDeleted = true;
-                    customer.DeletionTime = DateTime.UtcNow;
-                    customer.DeleterUserId = 0;
+                    Product.IsDeleted = true;
+                    Product.DeletionTime = DateTime.UtcNow;
+                    Product.DeleterUserId = 0;
                     await _db.SaveChangesAsync();
                 }
             }
