@@ -20,7 +20,7 @@ namespace TARetailOrder.ApiService.Repositories.Products
             try
             {
                 var qry = _db.Product
-                .Include(e=> e.CategoryId)
+                .Include(e=> e.CategoryFk)
                 .Where(c => !c.IsDeleted);
 
                 var totalCount = await qry.CountAsync();
