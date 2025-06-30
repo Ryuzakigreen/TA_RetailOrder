@@ -33,7 +33,7 @@ namespace TARetailOrder.ApiService.Repositories.Categories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Category Repository| Failed to Execute GetAllAsync. Error: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Failed to Execute GetAllAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
             
@@ -52,42 +52,42 @@ namespace TARetailOrder.ApiService.Repositories.Categories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Category Repository| Failed to Execute GetByIdAsync. Error: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Failed to Execute GetByIdAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
             
         }
 
-        public async Task InsertAsync(Category category)
+        public async Task InsertAsync(Category input)
         {
             try
             {
-                category.CreationTime = DateTime.UtcNow;
-                category.CreatorUserId = 0;
-                category.IsDeleted = false;
-                await _db.Category.AddAsync(category);
+                input.CreationTime = DateTime.UtcNow;
+                input.CreatorUserId = 0;
+                input.IsDeleted = false;
+                await _db.Category.AddAsync(input);
                 await _db.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Category Repository| Failed to Execute AddAsync. Error: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Failed to Execute AddAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
 
         }
 
-        public async Task UpdateAsync(Category category)
+        public async Task UpdateAsync(Category input)
         {
             try
             {
-                category.LastModificationTime = DateTime.UtcNow;
-                category.LastModifierUserId = 0;
-                _db.Category.Update(category);
+                input.LastModificationTime = DateTime.UtcNow;
+                input.LastModifierUserId = 0;
+                _db.Category.Update(input);
                 await _db.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Category Repository| Failed to Execute UpdateAsync. Error: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Failed to Execute UpdateAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
 
@@ -108,7 +108,7 @@ namespace TARetailOrder.ApiService.Repositories.Categories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Category Repository| Failed to Execute DeleteByIdAsync. Error: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Failed to Execute DeleteByIdAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
             
@@ -122,7 +122,7 @@ namespace TARetailOrder.ApiService.Repositories.Categories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Category Repository| Failed to Execute SaveChangesAsync. Error: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Failed to Execute SaveChangesAsync. Error: {ErrorMessage}", ex.Message);
                 throw;
             }
             

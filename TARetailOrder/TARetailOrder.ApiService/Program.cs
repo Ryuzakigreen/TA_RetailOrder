@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using TARetailOrder.ApiService.DataContext;
 using TARetailOrder.ApiService.Repositories.Categories;
 using TARetailOrder.ApiService.Repositories.Customers;
+using TARetailOrder.ApiService.Repositories.Products;
 using TARetailOrder.ApiService.Services;
 using TARetailOrder.ApiService.Services.Categories;
 using TARetailOrder.ApiService.Services.Customers;
+using TARetailOrder.ApiService.Services.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +46,10 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 //Category
 builder.Services.AddScoped<ICategoriesAppService, CategoriesAppService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
+//Product
+builder.Services.AddScoped<IProductsAppService, ProductsAppService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//
 
 
 

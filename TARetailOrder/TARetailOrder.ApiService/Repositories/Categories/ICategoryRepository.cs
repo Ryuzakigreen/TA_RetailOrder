@@ -7,8 +7,8 @@ namespace TARetailOrder.ApiService.Repositories.Categories
     {
         Task<(IEnumerable<Category> Items, int TotalCount)> GetAllAsync(FilterInputDto filter);
         Task<Category> GetByIdAsync(Guid id);
-        Task InsertAsync(Category customer);
-        Task UpdateAsync(Category customer);
+        Task InsertAsync(Category input);
+        Task UpdateAsync(Category input);
         Task DeleteByIdAsync(Guid id);
         Task<int> SaveChangesAsync();
     }
