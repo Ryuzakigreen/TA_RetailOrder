@@ -24,11 +24,20 @@ namespace TARetailOrder.ApiService.Services.Products
             _mapper = mapper;
         }
 
-        public async Task<GetAllProductDto> GetAllAsync(FilterInputDto filter)
+        public async Task<GetAllProductDto> GetAllByPageAsync(FilterInputDto filter)
         {
             try
             {
-                var products = await _productRepository.GetAllAsync(filter);
+                if (filter.page == 0)
+                {
+                    throw new ArgumentException("Page No. must greater than 0(zero)!", nameof(filter.page));
+                }
+                if (filter.size == 0)
+                {
+                    throw new ArgumentException("Page size must greater than 0(zero)!", nameof(filter.size));
+                }
+
+                var products = await _productRepository.GetAllByPageAsync(filter);
 
                 if (products.TotalCount == 0)
                 {

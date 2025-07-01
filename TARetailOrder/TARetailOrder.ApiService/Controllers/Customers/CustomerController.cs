@@ -26,7 +26,7 @@ namespace TARetailOrder.ApiService.Controllers.Customers
             {
                 _logger.LogInformation("Retrieving all customers");
 
-                var customers = await _customersAppService.GetAllAsync(filter);
+                var customers = await _customersAppService.GetAllByPageAsync(filter);
                 if(customers.SummaryResult.TotalCount == 0)
                 {
                     _logger.LogInformation("No Records");

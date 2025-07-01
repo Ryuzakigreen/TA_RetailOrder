@@ -9,9 +9,9 @@ namespace TARetailOrder.ApiService.Services.Categories.DTOs
         [SwaggerSchema("Leave empty for new Category, provide existing ID for updates")]
         public Guid? ID { get; set; }
         [Required]
-        [StringLength(200)]
+        [StringLength(200, MinimumLength = 1)]
         public string Name { get; set; }
-        [StringLength(500)]
+        [StringLength(500, MinimumLength = 0)]
         public string Description { get; set; }
         public Status Status { get; set; }
     }

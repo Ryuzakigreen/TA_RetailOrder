@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TARetailOrder.ApiService.DataContext;
@@ -11,9 +12,11 @@ using TARetailOrder.ApiService.DataContext;
 namespace TARetailOrder.ApiService.DataContext.Migrations
 {
     [DbContext(typeof(DBDataContext))]
-    partial class DBDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250630104901_Added-OrderHeader")]
+    partial class AddedOrderHeader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,45 +128,6 @@ namespace TARetailOrder.ApiService.DataContext.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("TARetailOrder.ApiService.DataContext.Models.Orders.OrderDetail", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CreatorUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("LastModifierUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("OrderHeaderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Qty")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("TotalAmt")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OrderHeaderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TARetailOrder.ApiService.DataContext.Models.Orders.OrderHeader", b =>
@@ -306,25 +270,6 @@ namespace TARetailOrder.ApiService.DataContext.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TARetailOrder.ApiService.DataContext.Models.Orders.OrderDetail", b =>
-                {
-                    b.HasOne("TARetailOrder.ApiService.DataContext.Models.Orders.OrderHeader", "OrderHeaderFk")
-                        .WithMany()
-                        .HasForeignKey("OrderHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TARetailOrder.ApiService.DataContext.Models.Product", "ProductFk")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderHeaderFk");
-
-                    b.Navigation("ProductFk");
                 });
 
             modelBuilder.Entity("TARetailOrder.ApiService.DataContext.Models.Orders.OrderHeader", b =>

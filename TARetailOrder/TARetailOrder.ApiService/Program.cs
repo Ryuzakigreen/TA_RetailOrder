@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using TARetailOrder.ApiService.DataContext;
 using TARetailOrder.ApiService.Repositories.Categories;
 using TARetailOrder.ApiService.Repositories.Customers;
+using TARetailOrder.ApiService.Repositories.Orders;
 using TARetailOrder.ApiService.Repositories.Products;
 using TARetailOrder.ApiService.Services;
 using TARetailOrder.ApiService.Services.Categories;
 using TARetailOrder.ApiService.Services.Customers;
+using TARetailOrder.ApiService.Services.Orders;
 using TARetailOrder.ApiService.Services.Products;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,11 +21,11 @@ builder.AddServiceDefaults();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
 
 //For Aspire's postgrest db server
-builder.AddNpgsqlDbContext<DBDataContext>("RetailOrderDB");
+//builder.AddNpgsqlDbContext<DBDataContext>("RetailOrderDB");
 
 //Initiating DBContext configuration on separate db server - for instance my local server
-//builder.Services.AddDbContext<DBDataContext>(options =>
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<DBDataContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -49,7 +51,15 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //Product
 builder.Services.AddScoped<IProductsAppService, ProductsAppService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-//
+//Orders
+builder.Services.AddScoped<IOrderHeaderAppService, OrderHeaderAppService>();
+builder.Services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
+
+builder.Services.AddScoped<IOrderDetailAppService, OrderDetailAppService>();
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
+builder.Services.AddScoped<IOrderAppService, OrderAppService>();
+
 
 
 
