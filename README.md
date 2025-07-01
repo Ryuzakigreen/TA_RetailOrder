@@ -66,5 +66,5 @@ OpenTelemetry.Instrumentation.Runtime (1.9.0)
 Prerequisites
 
 .NET 8 SDK
-Docker (for PostgreSQL and Redis)
+Docker Desktop (required to load PostgreSQL database and Redis cache)
 Visual Studio 2022 or VS Code
