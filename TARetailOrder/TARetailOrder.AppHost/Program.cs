@@ -10,7 +10,6 @@ var apiService = builder.AddProject<Projects.TARetailOrder_ApiService>("RetailOr
     .WithReference(retailOrderDb)
     .WithReference(cache);
 
-
 // Blazor Frontend
 //builder.AddProject<Projects.TARetailOrder_Web>("webfrontend")
 //    .WithExternalHttpEndpoints()

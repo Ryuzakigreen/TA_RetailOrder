@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using TARetailOrder.ApiService.DataContext.Models;
+using TARetailOrder.ApiService.DataContext.Models.Orders;
 using TARetailOrder.ApiService.Enums;
 using TARetailOrder.ApiService.Services.Customers;
 using TARetailOrder.ApiService.Services.PasswordHash;
@@ -24,11 +25,19 @@ namespace TARetailOrder.ApiService.DataContext
         public DbSet<User> User { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<OrderHeader> OrderHeader { get; set; }
+        public DbSet<OrderDetail> OrderDetail { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<OrderHeader>(entity =>
+            {
+                entity.Property(e => e.ID)
+                    .ValueGeneratedNever();
+            });
 
             //Seed data - For Demo Purpose only
             //SeedCustomers(modelBuilder);

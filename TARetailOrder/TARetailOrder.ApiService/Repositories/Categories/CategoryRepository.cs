@@ -16,7 +16,7 @@ namespace TARetailOrder.ApiService.Repositories.Categories
             _logger = logger;
         }
 
-        public async Task<(IEnumerable<Category> Items, int TotalCount)> GetAllAsync(FilterInputDto filter)
+        public async Task<(IEnumerable<Category> Items, int TotalCount)> GetAllByPageAsync(FilterInputDto filter)
         {
             try
             {

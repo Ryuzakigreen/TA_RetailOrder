@@ -23,11 +23,20 @@ namespace TARetailOrder.ApiService.Services.Customers
             _mapper = mapper;
         }
 
-        public async Task<GetAllCustomerDto> GetAllAsync(FilterInputDto filter)
+        public async Task<GetAllCustomerDto> GetAllByPageAsync(FilterInputDto filter)
         {
             try
             {
-                var customers = await _customerRepository.GetAllAsync(filter);
+                if(filter.page == 0)
+                {
+                    throw new ArgumentException("Page No. must greater than 0(zero)!", nameof(filter.page));
+                }
+                if (filter.size == 0)
+                {
+                    throw new ArgumentException("Page size must greater than 0(zero)!", nameof(filter.size));
+                }
+
+                var customers = await _customerRepository.GetAllByPageAsync(filter);
 
                 if (customers.TotalCount == 0)
                 {

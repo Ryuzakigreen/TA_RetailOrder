@@ -16,7 +16,7 @@ namespace TARetailOrder.ApiService.Repositories.Customers
             _logger = logger;
         }
 
-        public async Task<(IEnumerable<Customer>Items, int TotalCount)> GetAllAsync(FilterInputDto filter)
+        public async Task<(IEnumerable<Customer>Items, int TotalCount)> GetAllByPageAsync(FilterInputDto filter)
         {
             try
             {
