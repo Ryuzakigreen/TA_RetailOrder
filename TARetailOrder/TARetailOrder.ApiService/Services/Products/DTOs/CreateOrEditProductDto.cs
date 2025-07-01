@@ -10,17 +10,17 @@ namespace TARetailOrder.ApiService.Services.Products.DTOs
         [SwaggerSchema("Leave empty for new Product, provide existing ID for updates")]
         public Guid? ID { get; set; }
         [Required]
-        [StringLength(200)]
+        [StringLength(200, MinimumLength = 1)]
         public string Name { get; set; }
 
-        [StringLength(500)]
+        [StringLength(500, MinimumLength = 0)]
         public string Description { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
         public int Qty { get; set; }
 
-        [StringLength(50)]
+        [StringLength(50, MinimumLength = 0)]
         public string SKU { get; set; }
 
         public Guid? CategoryId { get; set; }

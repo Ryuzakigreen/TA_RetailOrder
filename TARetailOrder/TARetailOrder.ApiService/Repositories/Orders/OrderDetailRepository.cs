@@ -20,6 +20,15 @@ namespace TARetailOrder.ApiService.Repositories.Orders
         {
             try
             {
+                if (filter.page == 0)
+                {
+                    throw new ArgumentException("Page No. must greater than 0(zero)!", nameof(filter.page));
+                }
+                if (filter.size == 0)
+                {
+                    throw new ArgumentException("Page size must greater than 0(zero)!", nameof(filter.size));
+                }
+
                 var qry = _db.OrderDetail
                 .Include(e => e.ProductFk)
                 .Include(e => e.OrderHeaderFk)
@@ -39,12 +48,29 @@ namespace TARetailOrder.ApiService.Repositories.Orders
                 throw;
             }
         }
+        public async Task<Dictionary<Guid, OrderDetail>> GetAllDetailAsync()
+        {
+            try
+            {
+                var qry = await _db.OrderDetail
+                    .Include(e => e.ProductFk)
+                    .ToDictionaryAsync(p => p.ID, p => p);
+
+                return qry;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to Execute GetAllAsync. Error: {ErrorMessage}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<OrderDetail>> GetAllAsync()
         {
             try
             {
                 return _db.OrderDetail
-                .Include(e => e.ProductId);
+                .Include(e => e.ProductFk);
             }
             catch (Exception ex)
             {

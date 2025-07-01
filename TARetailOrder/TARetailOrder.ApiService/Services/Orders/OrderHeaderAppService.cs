@@ -24,6 +24,15 @@ namespace TARetailOrder.ApiService.Services.Orders
         {
             try
             {
+                if (filter.page == 0)
+                {
+                    throw new ArgumentException("Page No. must greater than 0(zero)!", nameof(filter.page));
+                }
+                if (filter.size == 0)
+                {
+                    throw new ArgumentException("Page size must greater than 0(zero)!", nameof(filter.size));
+                }
+
                 var headers = await _orderHeaderRepository.GetAllByPageAsync(filter);
 
                 if (headers.TotalCount == 0)
@@ -53,7 +62,7 @@ namespace TARetailOrder.ApiService.Services.Orders
                         CustomerName = string.Format("{0},{1}", o.CustomerFk?.LastName?.ToString(), o.CustomerFk?.FirstName?.ToString()),
                         Header = new OrderHeaderDto
                         {
-                            ID = o.ID.ToString(),
+                            ID = o.ID,
                             RefNo = o.RefNo,
                             CustomerId = o.CustomerId,
                             CreationTime = o.CreationTime,
@@ -86,7 +95,7 @@ namespace TARetailOrder.ApiService.Services.Orders
                             CustomerName = string.Format("{0},{1}", header.CustomerFk?.LastName?.ToString(), header.CustomerFk?.FirstName?.ToString()),
                             Header = new OrderHeaderDto
                             {
-                                ID = header.ID.ToString(),
+                                ID = header.ID,
                                 RefNo = header.RefNo,
                                 CustomerId = header.CustomerId,
                                 CreationTime = header.CreationTime,
@@ -102,11 +111,11 @@ namespace TARetailOrder.ApiService.Services.Orders
                 }
                 else if(customerId != Guid.Empty)
                 {
-                    var header = await _orderHeaderRepository.GetAllAsync();
+                    var header = await _orderHeaderRepository.GetAllHeaderAsync();
                     if (header != null)
                     {
 
-                        var qry = header.FirstOrDefault(x => x.CustomerId == customerId);
+                        var qry = header.FirstOrDefault(x => x.Key == customerId).Value;
                         if(qry != null)
                         {
                             return new ViewOrderHeaderDto()
@@ -114,7 +123,7 @@ namespace TARetailOrder.ApiService.Services.Orders
                                 CustomerName = string.Format("{0},{1}", qry.CustomerFk?.LastName?.ToString(), qry.CustomerFk?.FirstName?.ToString()),
                                 Header = new OrderHeaderDto
                                 {
-                                    ID = qry.ID.ToString(),
+                                    ID = qry.ID,
                                     RefNo = qry.RefNo,
                                     CustomerId = qry.CustomerId,
                                     CreationTime = qry.CreationTime,
@@ -157,8 +166,9 @@ namespace TARetailOrder.ApiService.Services.Orders
             try
             {
                 var Header = _mapper.Map<OrderHeader>(input);
-                return await _orderHeaderRepository.InsertAsync(Header);
                 _logger.LogInformation("Successfully inserted Header.");
+                return await _orderHeaderRepository.InsertAsync(Header);
+                
             }
             catch (Exception ex)
             {

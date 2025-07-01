@@ -2,7 +2,7 @@
 {
     public class CreateOrderDto
     {
-        public CreateOrEditOrderHeaderDto Header { get; set; }
-        public List<CreateOrEditOrderDetailDto> Details { get; set; }
+        public CreateOrderHeaderDto Header { get; set; }
+        public List<CreateOrderDetailDto> Details { get; set; }
     }
 }

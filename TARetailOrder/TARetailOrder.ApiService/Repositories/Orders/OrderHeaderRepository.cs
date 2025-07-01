@@ -20,6 +20,15 @@ namespace TARetailOrder.ApiService.Repositories.Orders
         {
             try
             {
+                if (filter.page == 0)
+                {
+                    throw new ArgumentException("Page No. must greater than 0(zero)!", nameof(filter.page));
+                }
+                if (filter.size == 0)
+                {
+                    throw new ArgumentException("Page size must greater than 0(zero)!", nameof(filter.size));
+                }
+
                 var qry = _db.OrderHeader
                 .Include(e => e.CustomerFk)
                 .OrderByDescending(x => x.CreationTime);
@@ -38,12 +47,27 @@ namespace TARetailOrder.ApiService.Repositories.Orders
                 throw;
             }
         }
+        public async Task<Dictionary<Guid, OrderHeader>> GetAllHeaderAsync()
+        {
+            try
+            {
+                var qry = await _db.OrderHeader
+                .ToDictionaryAsync(p => p.ID, p => p);
+
+                return qry;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to Execute GetAllAsync. Error: {ErrorMessage}", ex.Message);
+                throw;
+            }
+        }
 
         public async Task<IEnumerable<OrderHeader>> GetAllAsync()
         {
             try
             {
-                return _db.OrderHeader.Include(e => e.CustomerId);
+                return _db.OrderHeader.Include(e => e.CustomerFk);
             }
             catch (Exception ex)
             {
@@ -91,19 +115,30 @@ namespace TARetailOrder.ApiService.Repositories.Orders
 
         }
 
-        public async Task UpdateAsync(OrderHeader input)
+        public async Task<string> UpdateAsync(OrderHeader input)
         {
             try
             {
-                input.LastModificationTime = DateTime.UtcNow;
-                input.LastModifierUserId = 0;
-                _db.OrderHeader.Update(input);
+                
+                var qry = await _db.OrderHeader.FindAsync(input.ID);
+                if (qry == null)
+                {
+                    _logger.LogInformation("No Order Header Record Found. Unable to proceed!");
+                    return "No Order Header Record Found. Unable to proceed!";
+                }
+
+                qry.CustomerId = input.CustomerId != Guid.Empty ? input.CustomerId  : qry.CustomerId;
+                qry.Status = input.Status != Enums.OrderStatus.Pending ? input.Status : qry.Status;
+                qry.RefNo = input.RefNo ?? qry.RefNo;
+                qry.LastModificationTime = DateTime.UtcNow;
+                qry.LastModifierUserId = 0;
                 await _db.SaveChangesAsync();
+                return "Successfully updated Order's Status.";
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to Execute UpdateAsync. Error: {ErrorMessage}", ex.Message);
-                throw;
+                return "Failed to Execute UpdateAsync.Error";
             }
 
         }

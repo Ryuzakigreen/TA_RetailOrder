@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using TARetailOrder.ApiService.DataContext.Models.Orders;
 using TARetailOrder.ApiService.Repositories.Orders;
 using TARetailOrder.ApiService.Repositories.Products;
@@ -25,6 +26,15 @@ namespace TARetailOrder.ApiService.Services.Orders
         {
             try
             {
+                if (filter.page == 0)
+                {
+                    throw new ArgumentException("Page No. must greater than 0(zero)!", nameof(filter.page));
+                }
+                if (filter.size == 0)
+                {
+                    throw new ArgumentException("Page size must greater than 0(zero)!", nameof(filter.size));
+                }
+
                 var details = await _orderDetailRepository.GetAllByPageAsync(filter);
 
                 if (details.TotalCount == 0)
@@ -119,26 +129,30 @@ namespace TARetailOrder.ApiService.Services.Orders
             }
             try
             {
-                var details = await _orderDetailRepository.GetAllAsync();
+                var details = await _orderDetailRepository.GetAllDetailAsync();
+
+                var detailsByHeader = details
+                                .Where(x => x.Value.OrderHeaderId == headerId)
+                                .Select(o => new ViewOrderDetailDto()
+                                {
+                                    ProductName = o.Value.ProductFk?.Name?.ToString(),
+                                    Detail = new OrderDetailDto
+                                    {
+                                        ID = o.Value.ID,
+                                        OrderHeaderId = o.Value.OrderHeaderId,
+                                        ProductId = o.Value.ProductId,
+                                        Qty = o.Value.Qty,
+                                        TotalAmt = o.Value.TotalAmt,
+                                        CreationTime = o.Value.CreationTime,
+                                    }
+
+                                })
+                                .ToList();
                 if (details != null)
                 {
                     _logger.LogInformation("Successfully retrieved detail.");
 
-                    return details.Where(x => x.OrderHeaderId == headerId)
-                        .Select(o => new ViewOrderDetailDto()
-                        {
-                            ProductName = o.ProductFk?.Name?.ToString(),
-                            Detail = new OrderDetailDto
-                            {
-                                ID = o.ID,
-                                OrderHeaderId = o.OrderHeaderId,
-                                ProductId = o.ProductId,
-                                Qty = o.Qty,
-                                TotalAmt = o.TotalAmt,
-                                CreationTime = o.CreationTime,
-                            }
-
-                        }).ToList();
+                    return detailsByHeader;
                 }
                 else
                 {

@@ -7,6 +7,6 @@ namespace TARetailOrder.ApiService.Services.Orders
         Task<Guid?> Create(CreateOrderDto input);
         Task<GetOrderByHeaderDto> GetByOrderIdAsync(Guid Id);
         Task<GetOrderByHeaderDto> GetByCustomerIdAsync(Guid Id);
-        Task UpdateStatusAsync(UpdateOrderStatusDto input);
+        Task<string> UpdateStatusAsync(UpdateOrderStatusDto input);
     }
 }

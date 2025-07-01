@@ -21,11 +21,11 @@ builder.AddServiceDefaults();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
 
 //For Aspire's postgrest db server
-builder.AddNpgsqlDbContext<DBDataContext>("RetailOrderDB");
+//builder.AddNpgsqlDbContext<DBDataContext>("RetailOrderDB");
 
 //Initiating DBContext configuration on separate db server - for instance my local server
-//builder.Services.AddDbContext<DBDataContext>(options =>
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<DBDataContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 // Add services to the container.
 builder.Services.AddProblemDetails();

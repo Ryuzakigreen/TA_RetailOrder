@@ -6,6 +6,7 @@ namespace TARetailOrder.ApiService.Repositories.Orders
     public interface IOrderDetailRepository
     {
         Task<(IEnumerable<OrderDetail> Items, int TotalCount)> GetAllByPageAsync(FilterInputDto filter);
+        Task<Dictionary<Guid, OrderDetail>> GetAllDetailAsync();
         Task<IEnumerable<OrderDetail>> GetAllAsync();
         Task<OrderDetail> GetByIdAsync(Guid id);
         Task InsertAsync(OrderDetail input);

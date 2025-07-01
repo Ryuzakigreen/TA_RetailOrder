@@ -98,14 +98,13 @@ namespace TARetailOrder.ApiService.Controllers.Orders
         }
 
         [HttpPost("orderstatus")]
-        public async Task<ActionResult<Guid?>> UpdateStatus(UpdateOrderStatusDto input)
+        public async Task<ActionResult<String>> UpdateStatus(UpdateOrderStatusDto input)
         {
             try
             {
-                await _orderAppService.UpdateStatusAsync(input);
-                _logger.LogInformation("Successfully update status order.");
+                string msg = await _orderAppService.UpdateStatusAsync(input);
 
-                return Ok();
+                return Ok(msg);
             }
             catch (Exception ex)
             {

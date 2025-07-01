@@ -15,7 +15,7 @@ namespace TARetailOrder.ApiService.Repositories.Products
             _logger = logger;
         }
 
-        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetAllAsync(FilterInputDto filter)
+        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetAllByPageAsync(FilterInputDto filter)
         {
             try
             {
@@ -37,13 +37,29 @@ namespace TARetailOrder.ApiService.Repositories.Products
                 throw;
             }
         }
+        public async Task<Dictionary<Guid, Product>> GetAllProductAsync()
+        {
+            try
+            {
+                var qry = await _db.Product
+                .Where(c => !c.IsDeleted)
+                .ToDictionaryAsync(p => p.ID, p => p);
+
+                return qry;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to Execute GetAllAsync. Error: {ErrorMessage}", ex.Message);
+                throw;
+            }
+        }
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
             try
             {
                 var qry = await _db.Product
-                    .Include(e => e.CategoryId)
+                    .Include(e => e.CategoryFk)
                     .FirstOrDefaultAsync(e=> e.ID == id);
                 if(qry == null)
                 {
