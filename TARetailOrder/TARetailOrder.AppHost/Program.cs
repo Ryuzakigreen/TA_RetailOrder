@@ -7,12 +7,9 @@ var retailOrderDb = db.AddDatabase("RetailOrderDB");
 var cache = builder.AddRedis("cache");
 
 var apiService = builder.AddProject<Projects.TARetailOrder_ApiService>("RetailOrderApiService")
-<<<<<<< Updated upstream
-    .WithReference(retailOrderDb);
-=======
     .WithReference(retailOrderDb)
     .WithReference(cache);
->>>>>>> Stashed changes
+
 
 // Blazor Frontend
 //builder.AddProject<Projects.TARetailOrder_Web>("webfrontend")

@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-# TA_RetailOrder
-Retail Order Processing
-=======
 ﻿Retail Order Web API
 A modern, scalable web API for managing retail orders built with .NET Aspire and ASP.NET Core. This API provides comprehensive order management capabilities including customer management, product catalog, and order processing.
 🚀 Features
@@ -73,4 +69,4 @@ Prerequisites
 .NET 8 SDK
 Docker Desktop (required to load PostgreSQL database and Redis cache)
 Visual Studio 2022 or VS Code
->>>>>>> Stashed changes
+
